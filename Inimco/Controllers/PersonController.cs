@@ -20,10 +20,17 @@ namespace Inimco.Controllers
             _dataContext = dataContext;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<Person>> GetPerson()
+        [HttpPost]
+        public async Task<ActionResult<Person>> PostPerson(Person person)
         {
-            var person = await _dataContext.Persons.FirstAsync();
+            /*var person = await _dataContext.Persons.FirstAsync();*/
+            var personx = new Person()
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                SocialAccounts = new List<SocialAccount>(),
+                SocialSkills = new List<SocialSkill>(),
+            };
 
             Console.WriteLine("The number of VOWELS: " + VowelsAndConstenantsPerson(person)[0]);
             Console.WriteLine("The number of CONSTENANTS: " + VowelsAndConstenantsPerson(person)[1]);
@@ -38,6 +45,10 @@ namespace Inimco.Controllers
                 WriteIndented = true
             };
             Console.Write(JsonSerializer.Serialize(person, options));
+
+
+            _dataContext.Persons.Add(person);
+            await _dataContext.SaveChangesAsync();
 
             /*return Ok(await _dataContext.Persons.FirstAsync());*/
             return Ok(person);
